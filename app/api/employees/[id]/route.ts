@@ -3,12 +3,12 @@ import { supabase } from "@/utils/supabase";
 import { getUserFromRequest } from "@/utils/auth";
 
 export async function GET(
-  req: NextRequest,
-  context: { params: { id: string } }
+    req: NextRequest,
+    context: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = context.params;
-    const { user } = await getUserFromRequest(req); // ✅ Removed `error`
+    const { id } = await context.params;
+    const { user } = await getUserFromRequest(req);
 
     if (!user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -37,11 +37,11 @@ export async function GET(
 
 export async function PUT(
   req: NextRequest,
-  context: { params: { id: string } }
+  { params }: { params: { id: string } } // ✅ Fix applied
 ) {
   try {
-    const { id } = context.params;
-    const { user } = await getUserFromRequest(req); // ✅ Removed `error`
+    const { id } = params;
+    const { user } = await getUserFromRequest(req);
 
     if (!user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -73,11 +73,11 @@ export async function PUT(
 
 export async function DELETE(
   req: NextRequest,
-  context: { params: { id: string } }
+  { params }: { params: { id: string } } // ✅ Fix applied
 ) {
   try {
-    const { id } = context.params;
-    const { user } = await getUserFromRequest(req); // ✅ Removed `error`
+    const { id } = params;
+    const { user } = await getUserFromRequest(req);
 
     if (!user || user.role !== "admin") {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
