@@ -1,14 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabase } from "@/utils/supabase";
 
-export async function GET(
-  req: NextRequest,
-  { params }: { params: { id: string } }
-) {
-  const { id } = params;
+interface Context {
+  params: { id: string };
+}
+
+export async function GET(req: NextRequest, context: Context) {
+  const { id } = context.params;
   const url = new URL(req.url);
-  const startDate = url.searchParams.get("startDate"); // Optional
-  const endDate = url.searchParams.get("endDate"); // Optional
+  const startDate = url.searchParams.get("startDate");
+  const endDate = url.searchParams.get("endDate");
 
   if (!id) {
     return NextResponse.json({ error: "Employee ID is required" }, { status: 400 });
