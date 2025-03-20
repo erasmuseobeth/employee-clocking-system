@@ -8,7 +8,7 @@ export async function GET(
 ) {
   try {
     const { id } = context.params;
-    const { user, error } = await getUserFromRequest(req);
+    const { user } = await getUserFromRequest(req); // ✅ Removed `error`
 
     if (!user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -41,7 +41,7 @@ export async function PUT(
 ) {
   try {
     const { id } = context.params;
-    const { user, error } = await getUserFromRequest(req);
+    const { user } = await getUserFromRequest(req); // ✅ Removed `error`
 
     if (!user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -77,7 +77,7 @@ export async function DELETE(
 ) {
   try {
     const { id } = context.params;
-    const { user, error } = await getUserFromRequest(req);
+    const { user } = await getUserFromRequest(req); // ✅ Removed `error`
 
     if (!user || user.role !== "admin") {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
