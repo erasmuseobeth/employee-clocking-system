@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { MdOutlineWbSunny } from "react-icons/md";
+// import { MdOutlineWbSunny } from "react-icons/md";
 import { HiOutlineArrowRight } from "react-icons/hi";
 import { LuAlarmClock } from "react-icons/lu";
 import { LuChartNoAxesCombined } from "react-icons/lu";

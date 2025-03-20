@@ -3,8 +3,9 @@ import { supabase } from "@/utils/supabase";
 import bcrypt from "bcryptjs";
 
 export async function POST(req: NextRequest) {
-  const { token, new_password } = await req.json();
-
+  const {
+     token,
+      new_password } = await req.json();
   // Hash new password
   const hashedPassword = await bcrypt.hash(new_password, 10);
 
@@ -12,6 +13,7 @@ export async function POST(req: NextRequest) {
   const { error } = await supabase.auth.updateUser({
     password: new_password, // Supabase handles hashing internally
   });
+  console.log(token, hashedPassword);
 
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 400 });

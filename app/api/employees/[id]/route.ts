@@ -26,7 +26,8 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
 
         return NextResponse.json({ employee }, { status: 200 });
     } catch (err) {
-        return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+        console.error(err);
+        return NextResponse.json({ error: "Internal Server Error",  }, { status: 500 });
     }
 }
 
@@ -57,6 +58,7 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
 
         return NextResponse.json({ employee: data }, { status: 200 });
     } catch (err) {
+        console.error(err);
         return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
     }
 }
@@ -77,6 +79,7 @@ export async function DELETE(req: Request, { params }: { params: { id: string } 
 
         return NextResponse.json({ message: "Employee deleted" }, { status: 200 });
     } catch (err) {
+        console.error(err);
         return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
     }
 }
