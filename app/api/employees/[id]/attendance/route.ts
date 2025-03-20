@@ -3,18 +3,18 @@ import { supabase } from "@/utils/supabase";
 
 export async function GET(
   req: NextRequest,
-  context: { params: Promise<{ id: string }> } // ✅ Fix: Await the params promise
+  context: { params: Promise<{ id: string }> }
 ) {
-  const { id } = await context.params; // ✅ Await params correctly
+  const { id } = await context.params;
   const url = new URL(req.url);
-  const startDate = url.searchParams.get("startDate"); // Optional
-  const endDate = url.searchParams.get("endDate"); // Optional
+  const startDate = url.searchParams.get("startDate");
+  const endDate = url.searchParams.get("endDate");
 
   if (!id) {
     return NextResponse.json({ error: "Employee ID is required" }, { status: 400 });
   }
 
-  // ✅ Validate if the employee exists
+  // Validate employee existence
   const { data: employee, error: employeeError } = await supabase
     .from("employees")
     .select("id")
@@ -25,7 +25,7 @@ export async function GET(
     return NextResponse.json({ error: "Employee not found" }, { status: 404 });
   }
 
-  // ✅ Query attendance records with optional date filters
+  // Build query with optional date filters
   let query = supabase
     .from("attendance")
     .select("*")
