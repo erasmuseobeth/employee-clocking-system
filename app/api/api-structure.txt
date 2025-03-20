@@ -1,0 +1,23 @@
+/api
+  ├── /auth
+  │    ├── POST /auth/login  → Employee/Admin Login (Public)
+  │    ├── POST /auth/logout  → Logout (Authenticated)
+  │    ├── POST /auth/signup  → Employee Signup (Admin Only)
+  │    ├── POST /auth/forgot-password  → Request Password Reset (Public)
+  │    ├── POST /auth/reset-password  → Reset Password (Public)
+  ├── /employees  (Authenticated Employees & Admin)
+  │    ├── GET /employees  → Get all employees (Admin Only)
+  │    ├── POST /employees  → Create a new employee (Admin Only)
+  │    ├── GET /employees/:id  → Get a specific employee (Self/Admin)
+  │    ├── PUT /employees/:id  → Update a specific employee (Self/Admin)
+  │    ├── DELETE /employees/:id  → Delete an employee (Admin Only)
+  │    ├── GET /employees/:id/attendance → Get attendance (Self/Admin)
+  │    ├── POST /employees/:id/clock-in → Employee clock-in (Self)
+  │    ├── POST /employees/:id/clock-out → Employee clock-out (Self)
+  │    ├── GET /employees/:id/leave-requests → Get employee leave requests (Self/Admin)
+  │    ├── POST /employees/:id/leave-requests → Create leave request (Self)
+  │    ├── GET /employees/:id/support → View support tickets (Self/Admin)
+  │    ├── POST /employees/:id/support → Submit support request (Self)
+  ├── /admin (Admin Only)
+  │    ├── GET /admin/reports → Get system-wide reports
+  │    ├── GET /admin/logs → View system logs

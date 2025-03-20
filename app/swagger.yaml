@@ -1,0 +1,207 @@
+openapi: 3.0.0
+info:
+  title: Employee Clocking System API
+  description: API documentation for the employee clocking system.
+  version: 1.0.0
+servers:
+  - url: http://localhost:3000/api
+    description: Local development server
+
+paths:
+  /auth/signup:
+    post:
+      summary: User Signup
+      description: Register a new employee.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+                first_name:
+                  type: string
+                last_name:
+                  type: string
+      responses:
+        '201':
+          description: User created successfully
+        '400':
+          description: Invalid request
+
+  /auth/login:
+    post:
+      summary: User Login
+      description: Authenticate an employee.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Login successful
+        '401':
+          description: Unauthorized
+
+  /auth/logout:
+    post:
+      summary: User Logout
+      description: Logs out an authenticated user.
+      responses:
+        '200':
+          description: Logout successful
+        '401':
+          description: Unauthorized
+
+  /auth/forgot-password:
+    post:
+      summary: Forgot Password
+      description: Sends a password reset email.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+      responses:
+        '200':
+          description: Email sent
+        '400':
+          description: Invalid request
+
+  /employees/{id}/clock-in:
+    post:
+      summary: Employee Clock In/Out
+      description: Logs an employee's clock-in or clock-out time.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  enum: [in, out]
+      responses:
+        '200':
+          description: Clock-in or clock-out successful
+        '400':
+          description: Invalid request
+
+  /employees/{id}/attendance:
+    get:
+      summary: Get Employee Attendance
+      description: Retrieve attendance records of an employee.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Attendance data retrieved
+        '404':
+          description: Employee not found
+
+  /employees/{id}/leave-request:
+    post:
+      summary: Request Leave
+      description: Employee requests leave.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                start_date:
+                  type: string
+                  format: date
+                end_date:
+                  type: string
+                  format: date
+                reason:
+                  type: string
+      responses:
+        '200':
+          description: Leave request submitted
+        '400':
+          description: Invalid request
+
+  /admin/employees:
+    get:
+      summary: Get All Employees
+      description: Admin retrieves a list of employees.
+      responses:
+        '200':
+          description: List of employees
+        '403':
+          description: Forbidden
+
+  /admin/employees/{id}:
+    get:
+      summary: Get Employee Details
+      description: Admin retrieves details of a specific employee.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Employee details retrieved
+        '404':
+          description: Employee not found
+
+    delete:
+      summary: Delete Employee
+      description: Admin deletes an employee record.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Employee deleted
+        '403':
+          description: Forbidden
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+security:
+  - BearerAuth: []
