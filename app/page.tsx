@@ -9,26 +9,6 @@ import { LuLock } from "react-icons/lu";
 export default function Home() {
   return (
     <main className="min-h-screen bg-white">
-      {/* Navbar */}
-      <nav className="w-full bg-white shadow-md p-4">
-        <div className="max-w-[90%] mx-auto flex justify-between items-center">
-          <div className="flex items-center">
-            <Image src="/Logo-victoria.png" alt="Logo" width={24} height={24}/>
-          <h1 className="text-2xl font-bold text-gray-900">Clocking System</h1>
-          </div>
-
-          <div className="text-lg flex items-center gap-x-4 font-medium">
-            <a href="/login" className="text-gray-700 hover:text-primary mr-4">Home</a>
-            <a href="/login" className="text-gray-700 hover:text-primary mr-4">Features</a>
-            <a href="/login" className="text-gray-700 hover:text-primary mr-4">Pricing</a>
-            <a href="/login" className="text-gray-700 hover:text-primary mr-4">Login</a>
-            <a className="px-4 py-[5px] cursor-pointer bg-primary rounded-lg inline-flex justify-center items-center gap-2.5">
-            <div className="justify-start text-white text-base font-normal font-['Poppins']">Get Started</div></a>
-            <div className="text-black text-3xl"><MdOutlineWbSunny /></div>
-          </div>
-        </div>
-      </nav>
-
     {/* Hero Section */}
 
     <div className="p-20 flex items-center justify-center">
@@ -91,25 +71,25 @@ export default function Home() {
 
       {/* How it works */}
 
-      <div className="bg-[#E7F8E6] text-black relative overflow-hidden">
-  <h2 className="mt-8 text-4xl font-['Poppins'] text-center font-semibold pt-10">How It Works</h2>
+      <div className="bg-[#E7F8E6] text-black">
+      <h2 className="mt-8 text-[20px] font-['Poppins'] text-center font-semibold pt-10">How It Works</h2>
 
-  <div className="mt-10 flex justify-center items-center relative max-w-6xl mx-auto">
-    {/* Text Content */}
-    <div className="flex flex-col z-10">
-      <h3 className="text-[24px] font-bold">Effortless Clock-In & Clock-Out</h3>
-      <p className="font-medium max-w-3xl text-gray-500 text-lg font-['Poppins']">
-        Employees can seamlessly clock in and out with just one click, ensuring accurate work hours every day.
-      </p>
-    </div>
+      <div className="mt-10 flex m-auto justify-center items-center">
+        <div className="flex flex-col">
+        <h3 className="text-4xl font-bold">Effortless Clock-In & Clock-Out</h3>
+        <p className="font-medium max-w-3xl text-gray-500 text-lg font-['Poppins']">Employees can seamlessly clock in and out with just one click, ensuring accurate work hours every day</p>
+          </div>
 
-    {/* Overlapping Laptop Image */}
-    <div className="absolute right-[-50px] top-1/2 transform -translate-y-1/2">
-      <Image src="/laptop.png" alt="Logo" width={400} height={80} />
-    </div>
-  </div>
-</div>
+          <div>
+            <Image src="/laptop.png" alt="Logo" width={400} height={80}/>
+          </div>
 
+          <div>
+
+          </div>
+      </div>
+
+      </div>
 
       {/* Footer */}
       <footer className="text-center py-6 bg-gray-900 text-gray-300">
