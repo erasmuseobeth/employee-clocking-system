@@ -1,14 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabase } from "@/utils/supabase";
 
-  export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
+// Correct type for dynamic route params
+type Context = { params: { id: string } };
 
-  const { id } = params;
+export async function GET(req: NextRequest, context: Context) {
+  const { id } = context.params;
   const url = new URL(req.url);
   const startDate = url.searchParams.get("startDate"); // Optional
   const endDate = url.searchParams.get("endDate"); // Optional
 
-  // Validate employee exists
+  // Validate if employee exists
   const { data: employee, error: employeeError } = await supabase
     .from("employees")
     .select("id")
@@ -24,7 +26,7 @@ import { supabase } from "@/utils/supabase";
     .from("attendance")
     .select("*")
     .eq("employee_id", id)
-    .order("date", { ascending: false }); // Show latest records first
+    .order("date", { ascending: false });
 
   if (startDate) query = query.gte("date", startDate);
   if (endDate) query = query.lte("date", endDate);
@@ -35,5 +37,5 @@ import { supabase } from "@/utils/supabase";
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 
-  return NextResponse.json({ attendance: data });
+  return NextResponse.json({ attendance: data }, { status: 200 });
 }
