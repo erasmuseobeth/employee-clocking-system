@@ -29,7 +29,7 @@ export default function ForgotPassword() {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-4 py-2 mt-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="w-full px-4 py-2 mt-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
               placeholder="Enter your email"
               required
             />
@@ -38,7 +38,7 @@ export default function ForgotPassword() {
           {/* Reset Password Button */}
           <button
             type="submit"
-            className="w-full mt-6 bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition"
+            className="w-full mt-6 bg-primary text-white py-2 rounded-lg hover:bg-primary transition"
           >
             Send Reset Link
           </button>
@@ -47,7 +47,7 @@ export default function ForgotPassword() {
         {/* Back to Login Link */}
         <p className="mt-4 text-center text-gray-600">
           Remember your password?{" "}
-          <a href="/auth/login" className="text-blue-500 hover:underline">
+          <a href="/login" className="text-primary hover:underline">
             Login
           </a>
         </p>
