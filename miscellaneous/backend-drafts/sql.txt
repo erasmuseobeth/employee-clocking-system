@@ -1,0 +1,110 @@
+DROP TABLE IF EXISTS employees CASCADE;
+DROP TABLE IF EXISTS attendance CASCADE;
+DROP TABLE IF EXISTS leave_requests CASCADE;
+DROP TABLE IF EXISTS notifications CASCADE;
+DROP TABLE IF EXISTS logs CASCADE;
+DROP TABLE IF EXISTS reports CASCADE;
+DROP TABLE IF EXISTS departments CASCADE;
+DROP TABLE IF EXISTS roles CASCADE;
+-- Role Table (Must be created first because employees reference it)
+CREATE TABLE roles (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  name VARCHAR(50) CHECK (name IN ('Admin', 'Employee', 'Manager')) NOT NULL,
+  permissions JSON NOT NULL
+);
+
+-- Department Table (Created first but without manager_id reference to employees)
+CREATE TABLE departments (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  name VARCHAR(100) UNIQUE NOT NULL
+);
+
+-- Employee Table (Now references existing roles and departments)
+CREATE TABLE employees (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  first_name VARCHAR(50) NOT NULL,
+  last_name VARCHAR(50) NOT NULL,
+  email VARCHAR(100) UNIQUE NOT NULL,
+  password VARCHAR(255) NOT NULL,
+  phone_number VARCHAR(20),
+  profile_pic_url TEXT,  
+  role_id UUID REFERENCES roles(id) ON DELETE SET NULL,
+  department_id UUID REFERENCES departments(id) ON DELETE SET NULL,
+  status VARCHAR(20) CHECK (status IN ('Active', 'Inactive')) DEFAULT 'Active',
+  created_at TIMESTAMP DEFAULT now(),
+  updated_at TIMESTAMP DEFAULT now()
+);
+
+-- Now we can safely add the manager_id reference to employees
+ALTER TABLE departments ADD COLUMN manager_id UUID REFERENCES employees(id) ON DELETE SET NULL;
+
+-- Attendance Table
+CREATE TABLE attendance (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  employee_id UUID REFERENCES employees(id) ON DELETE CASCADE,
+  clock_in_time TIMESTAMP NOT NULL DEFAULT now(),
+  clock_out_time TIMESTAMP,
+  status VARCHAR(20) CHECK (status IN ('Present', 'Absent', 'Late')),
+  date DATE NOT NULL
+);
+
+-- Leave Requests Table
+CREATE TABLE leave_requests (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  employee_id UUID REFERENCES employees(id) ON DELETE CASCADE,
+  start_date DATE NOT NULL,
+  end_date DATE NOT NULL,
+  reason TEXT NOT NULL,
+  status VARCHAR(20) CHECK (status IN ('Pending', 'Approved', 'Rejected')) DEFAULT 'Pending'
+);
+
+-- Notifications Table
+CREATE TABLE notifications (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  employee_id UUID REFERENCES employees(id) ON DELETE CASCADE,
+  message TEXT NOT NULL,
+  read_status VARCHAR(10) CHECK (read_status IN ('Read', 'Unread')) DEFAULT 'Unread',
+  created_at TIMESTAMP DEFAULT now()
+);
+
+-- Logs Table
+CREATE TABLE logs (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  admin_id UUID REFERENCES employees(id) ON DELETE SET NULL,
+  action VARCHAR(50) CHECK (action IN ('Created', 'Updated', 'Deleted')) NOT NULL,
+  description TEXT NOT NULL,
+  timestamp TIMESTAMP DEFAULT now()
+);
+
+-- Reports Table
+CREATE TABLE reports (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  generated_by UUID REFERENCES employees(id) ON DELETE SET NULL,
+  report_type VARCHAR(50) CHECK (report_type IN ('Attendance', 'Performance')) NOT NULL,
+  date_generated TIMESTAMP DEFAULT now(),
+  file_path TEXT NOT NULL
+);
+
+-- Insert Sample Data into roles first
+INSERT INTO roles (name, permissions) VALUES
+  ('Admin', '{"can_manage_employees": true, "can_view_reports": true, "can_approve_leaves": true}'),
+  ('Employee', '{"can_clock_in": true, "can_request_leave": true, "can_view_profile": true}');
+
+-- Insert Sample Data into departments
+INSERT INTO departments (name) VALUES
+  ('HR'),
+  ('Engineering'),
+  ('Finance');
+
+-- Insert Sample Employees (Ensure role exists first)
+INSERT INTO employees (first_name, last_name, email, password, phone_number, profile_pic_url, role_id, department_id, status) 
+VALUES 
+  ('John', 'Doe', 'john.doe@example.com', 'hashed_password', '1234567890', 'https://example.com/john.jpg', 
+    (SELECT id FROM roles WHERE name = 'Employee'), (SELECT id FROM departments WHERE name = 'HR'), 'Active'),
+  ('Alice', 'Smith', 'alice.smith@example.com', 'hashed_password', '0987654321', 'https://example.com/alice.jpg', 
+    (SELECT id FROM roles WHERE name = 'Admin'), (SELECT id FROM departments WHERE name = 'Engineering'), 'Active');
+
+-- Now, update departments to set a manager
+UPDATE departments
+SET manager_id = (SELECT id FROM employees WHERE first_name = 'Alice' AND last_name = 'Smith')
+WHERE name = 'Engineering';
