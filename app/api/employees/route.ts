@@ -4,7 +4,7 @@ import { getUserFromRequest } from "@/utils/auth";
 
 export async function GET(req: NextRequest) {
   try {
-    const { user, error } = await getUserFromRequest(req); // ✅ Destructure `user` and `error`
+    const { user } = await getUserFromRequest(req); // ✅ Destructure `user` and `error`
     
     if (!user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -27,7 +27,7 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   try {
-    const { user, error } = await getUserFromRequest(req); // ✅ Destructure `user` and `error`
+    const { user } = await getUserFromRequest(req); // ✅ Destructure `user` and `error`
 
     if (!user || !user.role || user.role !== "admin") {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
