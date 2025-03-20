@@ -1,11 +1,11 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { supabase } from "@/utils/supabase";
 
 export async function POST(
-  req: Request,
-  context: { params: { id: string } }
+  req: NextRequest,
+  context: { params: Promise<{ id: string }> }
 ) {
-  const { id } = context.params;
+  const { id } = await context.params; // ✅ Corrected to await the params
   const today = new Date().toISOString().split("T")[0];
 
   // Validate employee exists
@@ -40,8 +40,8 @@ export async function POST(
     .from("attendance")
     .update({ clock_out_time: new Date().toISOString() })
     .eq("id", attendance.id)
-    .select("*") // ✅ Return updated row
-    .single(); // ✅ Ensure single row is returned
+    .select("*")
+    .single(); // ✅ Ensure a single row is returned
 
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
