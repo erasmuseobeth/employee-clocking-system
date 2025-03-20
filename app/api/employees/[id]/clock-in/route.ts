@@ -3,9 +3,9 @@ import { supabase } from "@/utils/supabase";
 
 export async function POST(
   req: Request,
-  context: { params: { id: string } }
+  { params }: { params: Record<string, string> }
 ) {
-  const { id } = context.params;
+  const { id } = params; // ✅ Corrected context type
   const today = new Date().toISOString().split("T")[0];
 
   // Validate employee exists
@@ -42,7 +42,8 @@ export async function POST(
         status: "Present",
       },
     ])
-    .select("*"); // ✅ Ensure Supabase returns the inserted row
+    .select("*")
+    .single(); // ✅ Ensure a single row is returned
 
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
@@ -50,3 +51,4 @@ export async function POST(
 
   return NextResponse.json({ message: "Clocked in successfully", data }, { status: 201 });
 }
+
