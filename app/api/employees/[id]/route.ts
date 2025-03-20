@@ -4,11 +4,11 @@ import { getUserFromRequest } from "@/utils/auth";
 
 export async function GET(
   req: NextRequest,
-  context: { params: Promise<{ id: string }> }
+  context: { params: { id: string } }
 ) {
   try {
-    const { id } = await context.params; // ✅ Fixed by awaiting params
-    const user = await getUserFromRequest(req);
+    const { id } = context.params;
+    const { user, error } = await getUserFromRequest(req);
 
     if (!user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -18,13 +18,13 @@ export async function GET(
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
-    const { data: employee, error } = await supabase
+    const { data: employee, error: fetchError } = await supabase
       .from("employees")
       .select("*")
       .eq("id", id)
       .single();
 
-    if (error) {
+    if (fetchError) {
       return NextResponse.json({ error: "Employee not found" }, { status: 404 });
     }
 
@@ -37,11 +37,11 @@ export async function GET(
 
 export async function PUT(
   req: NextRequest,
-  context: { params: Promise<{ id: string }> }
+  context: { params: { id: string } }
 ) {
   try {
-    const { id } = await context.params; // ✅ Fixed
-    const user = await getUserFromRequest(req);
+    const { id } = context.params;
+    const { user, error } = await getUserFromRequest(req);
 
     if (!user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -53,14 +53,14 @@ export async function PUT(
 
     const updates = await req.json();
 
-    const { data, error } = await supabase
+    const { data, error: updateError } = await supabase
       .from("employees")
       .update(updates)
       .eq("id", id)
       .select()
       .single();
 
-    if (error) {
+    if (updateError) {
       return NextResponse.json({ error: "Update failed" }, { status: 400 });
     }
 
@@ -73,19 +73,22 @@ export async function PUT(
 
 export async function DELETE(
   req: NextRequest,
-  context: { params: Promise<{ id: string }> }
+  context: { params: { id: string } }
 ) {
   try {
-    const { id } = await context.params; // ✅ Fixed
-    const user = await getUserFromRequest(req);
+    const { id } = context.params;
+    const { user, error } = await getUserFromRequest(req);
 
     if (!user || user.role !== "admin") {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
-    const { error } = await supabase.from("employees").delete().eq("id", id);
+    const { error: deleteError } = await supabase
+      .from("employees")
+      .delete()
+      .eq("id", id);
 
-    if (error) {
+    if (deleteError) {
       return NextResponse.json({ error: "Failed to delete employee" }, { status: 500 });
     }
 
