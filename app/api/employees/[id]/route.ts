@@ -36,11 +36,12 @@ export async function GET(
 }
 
 export async function PUT(
-  req: NextRequest,
-  { params }: { params: { id: string } } // ✅ Fix applied
+    req: NextRequest,
+    context: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = params;
+    const { id } = await context.params;
+
     const { user } = await getUserFromRequest(req);
 
     if (!user) {
@@ -72,11 +73,11 @@ export async function PUT(
 }
 
 export async function DELETE(
-  req: NextRequest,
-  { params }: { params: { id: string } } // ✅ Fix applied
+    req: NextRequest,
+    context: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = params;
+    const { id } = await context.params;
     const { user } = await getUserFromRequest(req);
 
     if (!user || user.role !== "admin") {
