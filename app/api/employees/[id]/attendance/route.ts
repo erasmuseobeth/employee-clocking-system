@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabase } from "@/utils/supabase";
 
-export async function GET(req: NextRequest, context: { params: { id: string } }) {
-  const { id } = context.params;
+  export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
+
+  const { id } = params;
   const url = new URL(req.url);
   const startDate = url.searchParams.get("startDate"); // Optional
   const endDate = url.searchParams.get("endDate"); // Optional

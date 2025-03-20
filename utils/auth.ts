@@ -30,3 +30,23 @@ export async function getUserFromSession(req: Request) {
 
   return { id: employee.id, role: employee.role_id };
 }
+
+
+export async function getUserFromRequest(req: Request) {
+  const authHeader = req.headers.get("authorization");
+
+  if (!authHeader) {
+    return { user: null, error: "Missing Authorization header" };
+  }
+
+  const token = authHeader.replace("Bearer ", "").trim();
+  
+  // Validate token with Supabase
+  const { data, error } = await supabase.auth.getUser(token);
+
+  if (error) {
+    return { user: null, error: error.message };
+  }
+
+  return { user: data.user, error: null };
+}
