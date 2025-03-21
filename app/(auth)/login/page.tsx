@@ -10,38 +10,37 @@ export default function Login() {
   const [error, setError] = useState("");
   
   const router = useRouter();
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError("");
-
+  
     try {
       const res = await fetch("/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
-
+  
       const data = await res.json();
-
+      console.log(data.user.id);
+  
       if (!res.ok) {
         throw new Error(data.error || "Login failed");
       }
-
-      // Assuming your API returns { userId: "..." } on success
-      console.log(data)
-      const userId = data.userId;
-
-      // Redirect to dashboard with userIdnpm run
+  
+      // Extract user ID from response
+      const userId = data.user.id; // <-- FIXED
+  
+      // Redirect to dashboard with userId
       router.push(`/dashboard/employee?userId=${userId}`);
     } catch (err) {
-      // setError(err.message);
-      console.log(err)
+      console.error(err);
     } finally {
       setLoading(false);
     }
   };
+  
 
   return (
     <main className="min-h-screen flex items-center justify-center bg-gray-100">
