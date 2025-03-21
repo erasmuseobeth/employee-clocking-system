@@ -45,7 +45,7 @@ export default function DashboardLayout({
         </div>
 
         {/* Right Section - Attendance History */}
-        <div className="w-2/5 p-6 bg-gray-600 m-4 rounded-xl">
+        <div className="w-2/5 p-6 m-4 rounded-xl">
           {attendance}
         </div>
       </div>
