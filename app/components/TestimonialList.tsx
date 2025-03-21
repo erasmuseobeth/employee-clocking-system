@@ -9,7 +9,7 @@ type TestimonialCardProps = Testimonial & { bgColor: string };
 const TestimonialCard: React.FC<TestimonialCardProps> = ({ title, about, comment, bgColor }) => {
   return (
     <div className={`p-4 rounded-lg shadow-md ${bgColor} text-black flex flex-col`}>
-      <div className='flex gap-4 justify-center items-center'>
+      <div className='flex flex-col md:flex-row gap-4 justify-center items-center'>
           <Image src="/victoria-user.jpg" alt='testifier' width={48} height={48} className='rounded-full'/>
           <div className='flex flex-col'>
             <h3 className="font-bold text-lg">{title}</h3>
