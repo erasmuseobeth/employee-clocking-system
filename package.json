@@ -19,7 +19,8 @@
     "react-dom": "^19.0.0",
     "react-icons": "^5.5.0",
     "swiper": "^11.2.6",
-    "tailwindcss": "^4.0.14"
+    "tailwindcss": "^4.0.14",
+    "yamljs": "^0.3.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
@@ -27,6 +28,7 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/yamljs": "^0.2.34",
     "eslint": "^9",
     "eslint-config-next": "15.2.2",
     "typescript": "^5"
