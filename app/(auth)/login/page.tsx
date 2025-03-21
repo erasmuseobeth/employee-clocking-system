@@ -30,10 +30,11 @@ export default function Login() {
       }
 
       // Assuming your API returns { userId: "..." } on success
+      console.log(data)
       const userId = data.userId;
 
-      // Redirect to dashboard with userId
-      router.push(`/dashboard?userId=${userId}`);
+      // Redirect to dashboard with userIdnpm run
+      router.push(`/dashboard/employee?userId=${userId}`);
     } catch (err) {
       // setError(err.message);
       console.log(err)
