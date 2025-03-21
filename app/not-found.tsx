@@ -1,4 +1,6 @@
 import Link from "next/link";
+import Image from "next/image";
+
 
 export default function NotFound() {
   return (
@@ -14,11 +16,10 @@ export default function NotFound() {
         Go Back Home
       </Link>
 
-      <img
-        src="https://illustrations.popsy.co/white/resistance-band.svg"
-        alt="Not Found"
-        className="w-64 mt-6"
-      />
+  
+
+<Image src="https://illustrations.popsy.co/white/resistance-band.svg" alt="Not Found" className="w-64 mt-6" width={500} height={300} />
+
     </main>
   );
 }

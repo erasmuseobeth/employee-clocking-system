@@ -34,8 +34,9 @@ export default function Login() {
 
       // Redirect to dashboard with userId
       router.push(`/dashboard?userId=${userId}`);
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err) {
+      // setError(err.message);
+      console.log(err)
     } finally {
       setLoading(false);
     }
