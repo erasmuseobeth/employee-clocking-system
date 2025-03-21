@@ -6,10 +6,14 @@ import { LuLock } from "react-icons/lu";
 import { TestimonialList } from "./components/TestimonialList";
 import FAQ from "./components/FAQ.";
 import Footer from "./components/Footer";
+import Navbar from "./components/Navbar";
 
 export default function Home() {
   return (
     <div>
+
+    <Navbar />
+
       <div className="px-4 md:px-20 pt-20 flex flex-col md:flex-row items-center justify-center md:pt-20">
       {/* Left Section */}
       <div className="max-w-[60%] flex flex-col justify-start items-center md:items-start gap-2.5 text-center md:text-left">

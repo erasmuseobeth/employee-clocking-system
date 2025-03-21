@@ -28,22 +28,24 @@ export default function DashboardLayout({
           <div className="text-lg flex items-center gap-x-4 font-medium">
             <Link href="/" className="text-gray-700 hover:text-primary mr-4">Dashboard</Link>
             <Link href="#" className="text-gray-700 hover:text-primary mr-4">Leave Request</Link>
+            <div className="text-black text-3xl flex gap-4">
             <LuSettings />
             <ImNotification />
             <LuUserRound />
+            </div>
           </div>
         </div>
       </nav>
 
-      <div className="flex h-full">
+      <div className="flex">
         {/* Left Section */}
-        <div className="w-3/5 p-6 bg-gray-100">
+        <div className="w-3/5 p-6">
           {clocking}
           {stats}
         </div>
 
         {/* Right Section - Attendance History */}
-        <div className="w-2/5 p-6 bg-white border-l">
+        <div className="w-2/5 p-6 m-4 rounded-xl">
           {attendance}
         </div>
       </div>
