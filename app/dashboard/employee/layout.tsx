@@ -1,7 +1,4 @@
-import Image from "next/image";
-import Link from "next/link";
-import { ImNotification } from "react-icons/im";
-import { LuSettings, LuUserRound } from "react-icons/lu";
+import EmployeeNavbar from "@/app/components/EmployeeNavbar";
 
 export default function DashboardLayout({
   children,
@@ -16,36 +13,19 @@ export default function DashboardLayout({
 }) {
   return (
     <div className="h-screen">
-      <nav className="w-full bg-white shadow-md p-4 border-b border-gray-300">
-        <div className="max-w-[90%] mx-auto flex justify-between items-center">
-          <Link href="/">
-            <div className="flex items-center">
-              <Image src="/Logo-victoria.png" alt="Logo" width={24} height={24} />
-              <h1 className="text-2xl font-bold text-gray-900">Clocking System</h1>
-            </div>
-          </Link>
+      {/* Navbar */}
+      <EmployeeNavbar />
 
-          <div className="text-lg flex items-center gap-x-4 font-medium">
-            <Link href="/" className="text-gray-700 hover:text-primary mr-4">Dashboard</Link>
-            <Link href="#" className="text-gray-700 hover:text-primary mr-4">Leave Request</Link>
-            <div className="text-black text-3xl flex gap-4">
-            <LuSettings />
-            <ImNotification />
-            <LuUserRound />
-            </div>
-          </div>
-        </div>
-      </nav>
-
-      <div className="flex">
+      {/* Add padding-top to push content below navbar */}
+      <div className="flex pt-16">
         {/* Left Section */}
-        <div className="w-3/5 p-6">
+        <div className="w-3/5 p-10 flex-1 gap-8">
           {clocking}
           {stats}
         </div>
 
         {/* Right Section - Attendance History */}
-        <div className="w-2/5 p-6 m-4 rounded-xl">
+        <div className="w-2/5 p-6 m-4 rounded-xl hidden md:block">
           {attendance}
         </div>
       </div>

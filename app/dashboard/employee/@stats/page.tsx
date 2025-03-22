@@ -7,7 +7,7 @@ export default function StatsSection() {
         { label: "Late", value: 12 },
         { label: "Punctuality", value: "86%" },
       ].map((stat, index) => (
-        <div key={index} className="bg-white p-4 rounded-lg shadow">
+        <div key={index} className="bg-white p-4 rounded-lg shadow border-primary border-b-4">
           <h3 className="font-semibold">{stat.label}</h3>
           <p className="text-xl font-bold">{stat.value}</p>
         </div>

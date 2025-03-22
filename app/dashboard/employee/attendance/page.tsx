@@ -1,5 +1,4 @@
 "use client";
-
 import { useEffect, useState } from "react";
 
 type AttendanceRecord = {
@@ -7,24 +6,13 @@ type AttendanceRecord = {
   clockOut: string | null;
 };
 
-export default function AttendanceHistory() {
+export default function AttendancePage() {
   const [attendance, setAttendance] = useState<Record<string, AttendanceRecord>>({});
 
   useEffect(() => {
     const storedAttendance = JSON.parse(localStorage.getItem("attendance") || "{}");
     setAttendance(storedAttendance);
   }, []);
-
-  // Function to determine attendance status & color
-  const getAttendanceStatus = (record: AttendanceRecord) => {
-    if (record.clockIn && record.clockOut) {
-      return { status: "P", color: "green" }; // Present
-    } else if (record.clockIn && !record.clockOut) {
-      return { status: "L", color: "yellow" }; // Late
-    } else {
-      return { status: "A", color: "red" }; // Absent
-    }
-  };
 
   return (
     <div className="max-w-3xl mx-auto p-6">
@@ -33,7 +21,7 @@ export default function AttendanceHistory() {
         {Object.entries(attendance)
           .sort(([dateA], [dateB]) => new Date(dateB).getTime() - new Date(dateA).getTime()) // Sort by recent date
           .map(([date, record]) => {
-            const { status, color } = getAttendanceStatus(record);
+            const isPresent = !!record.clockIn;
             return (
               <div
                 key={date}
@@ -48,8 +36,12 @@ export default function AttendanceHistory() {
                     Clock-Out: {record.clockOut ? new Date(record.clockOut).toLocaleTimeString() : "--:--"}
                   </p>
                 </div>
-                <span className={`px-3 py-1 text-white rounded-lg font-medium bg-${color}-500`}>
-                  {status}
+                <span
+                  className={`px-3 py-1 text-white rounded-lg font-medium ${
+                    isPresent ? "bg-green-500" : "bg-red-500"
+                  }`}
+                >
+                  {isPresent ? "✅ P" : "❌ A"}
                 </span>
               </div>
             );
