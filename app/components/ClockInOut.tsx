@@ -7,14 +7,35 @@ export default function ClockInOut() {
   const [checkOutTime, setCheckOutTime] = useState<Date | null>(null);
   const [isCheckedIn, setIsCheckedIn] = useState(false);
   const [totalHours, setTotalHours] = useState<string>("00:00");
-  
+
+  useEffect(() => {
+    const storedAttendance = JSON.parse(localStorage.getItem("attendance") || "{}");
+    const today = new Date().toDateString();
+
+    if (storedAttendance[today]) {
+      const { clockIn, clockOut } = storedAttendance[today];
+      setCheckInTime(clockIn ? new Date(clockIn) : null);
+      setCheckOutTime(clockOut ? new Date(clockOut) : null);
+      setIsCheckedIn(clockIn && !clockOut);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (checkInTime && checkOutTime) {
+      const duration = (checkOutTime.getTime() - checkInTime.getTime()) / (1000 * 60);
+      const hours = Math.floor(duration / 60);
+      const minutes = Math.floor(duration % 60);
+      setTotalHours(`${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}`);
+    }
+  }, [checkInTime, checkOutTime]);
+
   useEffect(() => {
     let interval: NodeJS.Timeout | null = null;
 
     if (isCheckedIn && checkInTime) {
       interval = setInterval(() => {
         const now = new Date();
-        const duration = (now.getTime() - checkInTime.getTime()) / (1000 * 60); // Convert ms to minutes
+        const duration = (now.getTime() - checkInTime.getTime()) / (1000 * 60);
         const hours = Math.floor(duration / 60);
         const minutes = Math.floor(duration % 60);
         setTotalHours(`${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}`);
@@ -29,16 +50,20 @@ export default function ClockInOut() {
   }, [isCheckedIn, checkInTime]);
 
   const handleClockInOut = () => {
+    const now = new Date();
+    const today = now.toDateString();
+    const storedAttendance = JSON.parse(localStorage.getItem("attendance") || "{}");
+
     if (!isCheckedIn) {
-      // Clocking in
-      const now = new Date();
+      storedAttendance[today] = { clockIn: now, clockOut: null };
       setCheckInTime(now);
       setCheckOutTime(null);
     } else {
-      // Clocking out
-      const now = new Date();
+      storedAttendance[today].clockOut = now;
       setCheckOutTime(now);
     }
+
+    localStorage.setItem("attendance", JSON.stringify(storedAttendance));
     setIsCheckedIn(!isCheckedIn);
   };
 
@@ -55,7 +80,6 @@ export default function ClockInOut() {
       </button>
 
       <div className="flex gap-8 mt-6">
-        {/* Check-In Time */}
         <div className="flex flex-col items-center">
           <LuAlarmClock className="text-black text-[32px]" />
           <p className="text-lg font-bold text-black">
@@ -64,7 +88,6 @@ export default function ClockInOut() {
           <p className="text-md text-gray-700">Check-In Time</p>
         </div>
 
-        {/* Check-Out Time */}
         <div className="flex flex-col items-center">
           <LuAlarmClock className="text-black text-[32px]" />
           <p className="text-lg font-bold text-black">
@@ -73,7 +96,6 @@ export default function ClockInOut() {
           <p className="text-md text-gray-700">Check-Out Time</p>
         </div>
 
-        {/* Total Hours */}
         <div className="flex flex-col items-center">
           <LuAlarmClock className="text-black text-[32px]" />
           <p className="text-lg font-bold text-black">{totalHours}</p>
