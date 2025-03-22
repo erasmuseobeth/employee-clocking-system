@@ -26,7 +26,7 @@ export default function ClockingSection() {
   });
 
   return (
-    <div className="flex flex-col md:flex-row gap-10">
+    <div className="flex flex-col md:flex-row justify-between items-center">
       <div className="p-6 flex flex-col items-center">
         <h2 className="text-lg font-bold text-gray-500">Welcome, Victoria!</h2>
 
